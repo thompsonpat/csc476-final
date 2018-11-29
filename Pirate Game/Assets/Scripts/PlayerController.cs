@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     public int maxSailsDown = 3;
 	public float speed = 0;
 
+	[Header("Inventory")]
+	public int wood = 0;
+
     private Rigidbody2D rb;
 
     void Start()
@@ -57,5 +60,14 @@ public class PlayerController : MonoBehaviour
         }
 
 		speed = rb.velocity.magnitude;
+    }
+
+	void OnTriggerEnter2D(Collider2D other)
+    {
+		Debug.Log(gameObject.name + " : " + other.gameObject.name + " : " + Time.time);
+
+		if(other.tag == "Wood") wood += 1;
+		
+		Destroy(other.gameObject);
     }
 }
