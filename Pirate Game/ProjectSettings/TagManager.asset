@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Wood
+  - CannonBall
   layers:
   - Default
   - TransparentFX

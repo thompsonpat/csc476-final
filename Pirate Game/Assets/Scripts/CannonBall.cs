@@ -8,6 +8,9 @@ public class CannonBall : MonoBehaviour
     public int speed = 10;
     public float range = 1.0f;
 
+	[Header("Set Dynamically")]
+	public GameObject parent;
+
 	private Rigidbody2D rb;
 
     // Use this for initialization
@@ -22,8 +25,9 @@ public class CannonBall : MonoBehaviour
         rb.AddForce(transform.right * speed);
     }
 
-	void ParentCollider (Collider2D col)
+	void ParentInfo (GameObject parentGO)
 	{
-		Physics2D.IgnoreCollision(col, GetComponent<Collider2D>());
+		parent = parentGO;
+		Physics2D.IgnoreCollision(parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
 	}
 }

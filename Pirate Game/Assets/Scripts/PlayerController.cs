@@ -84,6 +84,6 @@ public class PlayerController : MonoBehaviour
     void ShootFrontCannons()
     {
         GameObject cannonBall = Instantiate(cannonBallPrefab, transform.position, transform.rotation);
-        cannonBall.SendMessage("ParentCollider", this.GetComponent<Collider2D>());
+        cannonBall.SendMessage("ParentInfo", this.gameObject);
     }
 }
