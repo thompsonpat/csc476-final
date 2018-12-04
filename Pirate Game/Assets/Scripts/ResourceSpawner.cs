@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class ResourceSpawner : MonoBehaviour
 {
-	private GameObject woodPrefab;
+    public GameObject woodPrefab;
 
     void Start()
     {
-		InvokeRepeating("LaunchProjectile", 2.0f, 0.3f);
+        InvokeRepeating("SpawnWood", 2.0f, 5.0f);
     }
 
     void Update()
@@ -16,8 +17,51 @@ public class ResourceSpawner : MonoBehaviour
 
     }
 
-	void SpawnWood()
-	{
+    void SpawnWood()
+    {
+        List<Vector3> usableTiles = TileLocationsInTileMap("Tilemap_Spawnable");
+        Grid grid = GameObject.Find("Grid").GetComponent<Grid>();
+        Vector3Int cellPosition = grid.WorldToCell(usableTiles[Random.Range(0, usableTiles.Count)]);
 
-	}
+        Instantiate(woodPrefab, grid.GetCellCenterWorld(cellPosition), Quaternion.identity);
+    }
+
+    public List<Vector3> TileLocationsInTileMap(string tilemapName)
+    {
+        Tilemap tileMap = GameObject.Find(tilemapName).GetComponent<Tilemap>();
+        List<Vector3> tileWorldLocations = new List<Vector3>();
+
+        foreach (var pos in tileMap.cellBounds.allPositionsWithin)
+        {
+            Vector3Int localPlace = new Vector3Int(pos.x, pos.y, pos.z);
+            Vector3 place = tileMap.CellToWorld(localPlace);
+            if (tileMap.HasTile(localPlace))
+            {
+                tileWorldLocations.Add(place);
+            }
+        }
+
+        // foreach (var thing in tileWorldLocations)
+        // {
+        // 	print(thing);
+        // }
+
+        return tileWorldLocations;
+    }
+
+    public List<int[]> Vect3ListToArray(List<Vector3> tileLocations)
+    {
+        List<int[]> newTileLocations = new List<int[]>();
+
+        foreach (var vectorLocation in tileLocations)
+        {
+            int[] newArray = new int[3];
+            newArray[0] = (int)vectorLocation.x;
+            newArray[1] = (int)vectorLocation.y;
+            newArray[2] = (int)vectorLocation.z;
+            newTileLocations.Add(newArray);
+        }
+
+        return newTileLocations;
+    }
 }
