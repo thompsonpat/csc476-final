@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-	[Header("Set in Inspector")]
+    public GameObject cannonBallPrefab;
+    
+    [Header("Set in Inspector")]
     public float accel = 1f;
     public float turnSpeed = .5f;
     public float maxSpeed = 10f;
     public int sailsDown = 0;
     public int maxSailsDown = 3;
-	public float speed = 0;
+    public float speed = 0;
 
-	[Header("Inventory")]
-	public int wood = 0;
+    public bool canShoot = true;
+
+    [Header("Inventory")]
+    public int wood = 0;
 
     private Rigidbody2D rb;
 
@@ -35,6 +39,12 @@ public class PlayerController : MonoBehaviour
         {
             sailsDown -= 1;
             if (sailsDown < 0) sailsDown = 0;
+        }
+
+        // If 'Down'
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (canShoot) ShootFrontCannons();
         }
     }
 
@@ -59,15 +69,21 @@ public class PlayerController : MonoBehaviour
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
 
-		speed = rb.velocity.magnitude;
+        speed = rb.velocity.magnitude;
     }
 
-	void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-		Debug.Log(gameObject.name + " : " + other.gameObject.name + " : " + Time.time);
+        Debug.Log(gameObject.name + " : " + other.gameObject.name + " : " + Time.time);
 
-		if(other.tag == "Wood") wood += 1;
-		
-		Destroy(other.gameObject);
+        if (other.tag == "Wood") wood += 1;
+
+        Destroy(other.gameObject);
+    }
+
+    void ShootFrontCannons()
+    {
+        GameObject cannonBall = Instantiate(cannonBallPrefab, transform.position, transform.rotation);
+        cannonBall.SendMessage("ParentCollider", this.GetComponent<Collider2D>());
     }
 }

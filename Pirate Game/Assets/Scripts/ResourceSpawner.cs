@@ -41,11 +41,6 @@ public class ResourceSpawner : MonoBehaviour
             }
         }
 
-        // foreach (var thing in tileWorldLocations)
-        // {
-        // 	print(thing);
-        // }
-
         return tileWorldLocations;
     }
 
