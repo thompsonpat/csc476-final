@@ -112,6 +112,7 @@ public class PlayerController : MonoBehaviour
         {
             if (health < maxHealth) health += 1;
             else wood += 1;
+            UpdateBoatSprite();
             Destroy(other.gameObject);
         }
         if (other.tag == "Crew")

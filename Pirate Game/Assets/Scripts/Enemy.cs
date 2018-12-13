@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     public float speed = 2;
     private int level = 1;
     private float health;
-	private float range = 3.0f;
+	private float range = 2.0f;
 
     public Image healthBar;
 
@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
         {
 			startHealth = 5;
 			health = startHealth;
-			range = 5.0f;
+			range = 3.0f;
 			if (Random.Range(0.0f, 1.0f) > 0.5f) this.transform.Find("Cannon2").gameObject.SetActive(true);
 			gameObject.GetComponent<Rigidbody2D>().mass = 5;
 			gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(0.4f, 1);
@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         // Finds all colliders within certain radius from given point
-        Collider2D[] collidersHit = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.x), range);
+        Collider2D[] collidersHit = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), range);
         foreach (var collider in collidersHit)
         {
             if (collider.tag == "Player")
