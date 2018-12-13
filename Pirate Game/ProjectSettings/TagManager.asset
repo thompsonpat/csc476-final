@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Wood
   - CannonBall
+  - Cannon
+  - Front
   layers:
   - Default
   - TransparentFX
