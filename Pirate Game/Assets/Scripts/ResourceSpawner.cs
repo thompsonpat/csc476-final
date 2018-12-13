@@ -22,8 +22,10 @@ public class ResourceSpawner : MonoBehaviour
         List<Vector3> usableTiles = TileLocationsInTileMap("Tilemap_Spawnable");
         Grid grid = GameObject.Find("Grid").GetComponent<Grid>();
         Vector3Int cellPosition = grid.WorldToCell(usableTiles[Random.Range(0, usableTiles.Count)]);
+        
         // Create new piece of wood
         var newWood = Instantiate(woodPrefab, grid.GetCellCenterWorld(cellPosition), Quaternion.identity);
+
         // Rotate new piece of wood
         newWood.transform.Rotate(Vector3.forward * Random.Range(0, 360));
     }

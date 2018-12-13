@@ -25,7 +25,8 @@ public class CannonBall : MonoBehaviour
     void FixedUpdate()
     {
         // Shoot Cannon Ball Right
-        rb.AddForce(transform.right * speed);
+        // rb.AddForce(transform.right * speed);
+        rb.AddForce(transform.up * speed);
     }
 
 	void ParentInfo (GameObject parentGO)

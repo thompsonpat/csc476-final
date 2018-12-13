@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public int maxSailsDown = 3;
     public float speed = 0;
 
-    public bool canShoot = true;
+    // public bool canShoot = true;
 
     [Header("Inventory")]
     public int wood = 0;
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
         // If 'Down'
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (canShoot) ShootFrontCannons();
+            ShootCannons("Front");
         }
     }
 
@@ -74,16 +74,25 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(gameObject.name + " : " + other.gameObject.name + " : " + Time.time);
-
+        // Debug.Log(gameObject.name + " : " + other.gameObject.name + " : " + Time.time);
         if (other.tag == "Wood") wood += 1;
-
         Destroy(other.gameObject);
     }
 
-    void ShootFrontCannons()
+    void ShootCannons(string side)
     {
-        GameObject cannonBall = Instantiate(cannonBallPrefab, transform.position, transform.rotation);
-        cannonBall.SendMessage("ParentInfo", this.gameObject);
+        foreach(Transform child in transform)
+        {
+            if (child.gameObject.name == "Cannon")
+            {
+                if (child.gameObject.tag == side)
+                {
+                    child.gameObject.SendMessage("ShootCannon");
+                    Debug.Log(child.gameObject.name);
+                }
+            }
+        }
+        // GameObject cannonBall = Instantiate(cannonBallPrefab, transform.position, transform.rotation);
+        // cannonBall.SendMessage("ParentInfo", this.gameObject);
     }
 }
