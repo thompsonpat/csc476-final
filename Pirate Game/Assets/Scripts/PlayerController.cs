@@ -28,9 +28,14 @@ public class PlayerController : MonoBehaviour
     public int maxSailsDown = 3;
     public float speed = 0;
 
+    [Header("Resource Costs")]
     public int sailLevel = 0;
     public int sailWoodCost = 4;
     public int sailCrewCost = 2;
+    public int cannonWoodCost = 2;
+    public int cannonCrewCost = 2;
+    public int hullWoodCost = 10;
+    public int hullCrewCost = 5;
 
     private int maxLeftCannons = 2;
     private int maxRightCannons = 2;
@@ -41,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Inventory")]
     public int wood = 0;
-    public int crew = 1;
+    public int crew = 0;
 
     private Rigidbody2D rb;
 
@@ -193,10 +198,10 @@ public class PlayerController : MonoBehaviour
             gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
             this.transform.Find("Front Cannon").transform.localPosition = new Vector2(0, .4f);
 
-            wood -= 10;
-            crew -= 5;
+            wood -= hullWoodCost;
+            crew -= hullCrewCost;
 
-            level++;
+            level += 1;
         }
     }
 
@@ -221,7 +226,7 @@ public class PlayerController : MonoBehaviour
 
     void AddCannon(string side)
     {
-        if ((crew >= 2) && (wood >= 2))
+        if ((crew >= cannonCrewCost) && (wood >= cannonWoodCost))
         {
             if (side == "Left" && (numLeftCannons < maxLeftCannons))
             {
@@ -238,8 +243,8 @@ public class PlayerController : MonoBehaviour
             }
 
             // Cannon resource cost
-            crew -= 2;
-            wood -= 2;
+            crew -= cannonCrewCost;
+            wood -= cannonWoodCost;
         }
 
     }
