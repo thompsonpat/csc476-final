@@ -235,7 +235,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 222285873}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3665252, z: 1}
+  m_LocalPosition: {x: 0, y: 0.03, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1872142176}
@@ -281,6 +281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cannonBallPrefab: {fileID: 1782231075841714, guid: 6d0c693d4796d784b9da33bb81eeceaa,
     type: 2}
+  dinghySprite: {fileID: 0}
   hullSprite: {fileID: 0}
   level: 1
   maxHealth: 2
@@ -1284,6 +1285,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1310,6 +1312,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woodPrefab: {fileID: 1150172185072738, guid: 2b32703fc056b414d976bc40963ef1cf, type: 2}
+  crewPrefab: {fileID: 1721960263539616, guid: a6d68d5c1dc724d45a10fc7d0e872130, type: 2}
+  crewImages:
+  - {fileID: 21300000, guid: bfcd135990397d141a601216ca16e006, type: 3}
+  - {fileID: 21300000, guid: 72d3ac585e6ba0f47bda5935cde52bce, type: 3}
+  - {fileID: 21300000, guid: 5e5328d979f9acd4e90e215b74acb5a0, type: 3}
+  - {fileID: 21300000, guid: 08455f0134526774192c4cd3d499e417, type: 3}
+  - {fileID: 21300000, guid: 072b16b6aab81ba4692a2155d2764f30, type: 3}
+  - {fileID: 21300000, guid: 2e7e0bc1febd701438c64ca0e0bcc6c2, type: 3}
+  usableTiles: []
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1334,7 +1345,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1363,6 +1374,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4085959539b23d74ea1afb373ad3506d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followTarget: {fileID: 222285873}
+  dampTime: 0.15
+  smooth: 1.5
 --- !u!1 &533140886
 GameObject:
   m_ObjectHideFlags: 0
@@ -5041,11 +5066,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4685400409383148, guid: 012e77fa61cf7fd489f2281a9ba37182, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -4.83
+      value: -1.56
       objectReference: {fileID: 0}
     - target: {fileID: 4685400409383148, guid: 012e77fa61cf7fd489f2281a9ba37182, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1.51
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: 4685400409383148, guid: 012e77fa61cf7fd489f2281a9ba37182, type: 2}
       propertyPath: m_LocalPosition.z

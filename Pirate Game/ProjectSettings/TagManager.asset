@@ -10,6 +10,7 @@ TagManager:
   - Front
   - LeftSide
   - RightSide
+  - Crew
   layers:
   - Default
   - TransparentFX

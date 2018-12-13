@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject cannonBallPrefab;
+    public Sprite dinghySprite;
     public Sprite hullSprite;
 
     [Header("Set in Inspector")]
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Inventory")]
     public int wood = 0;
+    public int crew = 1;
 
     private Rigidbody2D rb;
 
@@ -85,6 +87,7 @@ public class PlayerController : MonoBehaviour
     {
         // Debug.Log(gameObject.name + " : " + other.gameObject.name + " : " + Time.time);
         if (other.tag == "Wood") wood += 1;
+        if (other.tag == "Crew") crew += 1;
         Destroy(other.gameObject);
     }
 
@@ -97,12 +100,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (child.gameObject.tag == side)
                 {
-                    count++;
                     child.gameObject.SendMessage("ShootCannon");
                 }
             }
         }
-        Debug.Log(count);
     }
 
     void LevelUp()
@@ -114,6 +115,7 @@ public class PlayerController : MonoBehaviour
             sailsDown = 1;
             maxSailsDown = 1;
             gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
+            gameObject.GetComponent<Rigidbody2D>().mass = 1.2f;
             level++;
         }
     }

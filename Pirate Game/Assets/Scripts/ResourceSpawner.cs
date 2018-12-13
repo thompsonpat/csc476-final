@@ -6,10 +6,20 @@ using UnityEngine.Tilemaps;
 public class ResourceSpawner : MonoBehaviour
 {
     public GameObject woodPrefab;
+    public GameObject crewPrefab;
+
+    public Sprite[] crewImages = new Sprite[6];
+
+    public List<Vector3> usableTiles;
+    private Grid grid;
 
     void Start()
     {
-        InvokeRepeating("SpawnWood", 2.0f, 5.0f);
+        usableTiles = TileLocationsInTileMap("Tilemap_Spawnable");
+        grid = GameObject.Find("Grid").GetComponent<Grid>();
+        
+        InvokeRepeating("SpawnWood", 5.0f, 15.0f);
+        InvokeRepeating("SpawnCrew", 5.0f, 30.0f);
     }
 
     void Update()
@@ -18,16 +28,28 @@ public class ResourceSpawner : MonoBehaviour
     }
 
     void SpawnWood()
-    {
-        List<Vector3> usableTiles = TileLocationsInTileMap("Tilemap_Spawnable");
-        Grid grid = GameObject.Find("Grid").GetComponent<Grid>();
+    {   
         Vector3Int cellPosition = grid.WorldToCell(usableTiles[Random.Range(0, usableTiles.Count)]);
-        
+
         // Create new piece of wood
         var newWood = Instantiate(woodPrefab, grid.GetCellCenterWorld(cellPosition), Quaternion.identity);
 
         // Rotate new piece of wood
         newWood.transform.Rotate(Vector3.forward * Random.Range(0, 360));
+    }
+
+    void SpawnCrew()
+    {
+        Vector3Int cellPosition = grid.WorldToCell(usableTiles[Random.Range(0, usableTiles.Count)]);
+        
+        // Create new crew
+        var newCrew = Instantiate(crewPrefab, grid.GetCellCenterWorld(cellPosition), Quaternion.identity);
+
+        // Rotate new crew
+        newCrew.transform.Rotate(Vector3.forward * Random.Range(0, 360));
+
+        // Select Random Crew Image
+        newCrew.GetComponent<SpriteRenderer>().sprite = crewImages[Random.Range(0, crewImages.Length - 1)];
     }
 
     public List<Vector3> TileLocationsInTileMap(string tilemapName)
