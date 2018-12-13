@@ -230,7 +230,7 @@ MonoBehaviour:
     type: 2}
   woodPrefab: {fileID: 1150172185072738, guid: 2b32703fc056b414d976bc40963ef1cf, type: 2}
   crewPrefab: {fileID: 1721960263539616, guid: a6d68d5c1dc724d45a10fc7d0e872130, type: 2}
-  startHealth: 3
+  startHealth: 2
   speed: 2
   healthBar: {fileID: 114991416577627184}
 --- !u!114 &114532839399538544

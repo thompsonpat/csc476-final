@@ -18,10 +18,17 @@ public class ResourceSpawner : MonoBehaviour
     {
         usableTiles = TileLocationsInTileMap("Tilemap_Spawnable");
         grid = GameObject.Find("Grid").GetComponent<Grid>();
+
+        for (int i = 0; i < 50; i ++)
+        {
+            SpawnWood();
+            SpawnCrew();
+            SpawnEnemy();
+        }
         
         InvokeRepeating("SpawnWood", 5.0f, 15.0f);
         InvokeRepeating("SpawnCrew", 5.0f, 15.0f);
-        InvokeRepeating("SpawnEnemy", 5.0f, 30.0f);
+        InvokeRepeating("SpawnEnemy", 5.0f, 60.0f);
     }
 
     void Update()

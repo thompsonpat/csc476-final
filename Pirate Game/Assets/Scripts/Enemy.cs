@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
     public GameObject woodPrefab;
     public GameObject crewPrefab;
 
-    public float startHealth = 3;
+    public float startHealth = 2;
     public float speed = 2;
     private int level = 1;
     private float health;
