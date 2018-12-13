@@ -29,7 +29,10 @@ public class Cannon : MonoBehaviour
         if (canShoot)
         {
             GameObject cannonBall = Instantiate(cannonBallPrefab, transform.position, transform.rotation);
-            cannonBall.SendMessage("ParentInfo", transform.parent.gameObject);
+			object[] tempArray = new object[2];
+			tempArray[0] = transform.parent.gameObject;
+			tempArray[1] = this.gameObject;
+            cannonBall.SendMessage("ParentInfo", tempArray);
 			canShoot = false;
             coolDownTime = reloadTime;
         }

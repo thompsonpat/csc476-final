@@ -5,10 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject cannonBallPrefab;
-    
+    public Sprite hullSprite;
+
     [Header("Set in Inspector")]
-    public float accel = 1f;
-    public float turnSpeed = .5f;
+    public int level = 1;
+    public int maxHealth = 2;
+    public int health;
+    public float accel = 1.2f;
+    public float turnSpeed = 2.5f;
     public float maxSpeed = 10f;
     public int sailsDown = 0;
     public int maxSailsDown = 3;
@@ -23,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        health = maxHealth;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -42,9 +47,13 @@ public class PlayerController : MonoBehaviour
         }
 
         // If 'Down'
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space)) ShootCannons("Front");
+        if (Input.GetKeyDown(KeyCode.Q)) ShootCannons("LeftSide");
+        if (Input.GetKeyDown(KeyCode.E)) ShootCannons("RightSide");
+
+        if (Input.GetKeyDown(KeyCode.Keypad0))
         {
-            ShootCannons("Front");
+            LevelUp();
         }
     }
 
@@ -81,18 +90,31 @@ public class PlayerController : MonoBehaviour
 
     void ShootCannons(string side)
     {
-        foreach(Transform child in transform)
+        int count = 0;
+        foreach (Transform child in transform)
         {
-            if (child.gameObject.name == "Cannon")
+            if (child.gameObject.name.Contains("Cannon"))
             {
                 if (child.gameObject.tag == side)
                 {
+                    count++;
                     child.gameObject.SendMessage("ShootCannon");
-                    Debug.Log(child.gameObject.name);
                 }
             }
         }
-        // GameObject cannonBall = Instantiate(cannonBallPrefab, transform.position, transform.rotation);
-        // cannonBall.SendMessage("ParentInfo", this.gameObject);
+        Debug.Log(count);
+    }
+
+    void LevelUp()
+    {
+        if (level == 1)
+        {
+            accel = .9f;
+            turnSpeed = 2.5f;
+            sailsDown = 1;
+            maxSailsDown = 1;
+            gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
+            level++;
+        }
     }
 }

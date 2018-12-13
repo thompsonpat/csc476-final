@@ -8,6 +8,8 @@ TagManager:
   - CannonBall
   - Cannon
   - Front
+  - LeftSide
+  - RightSide
   layers:
   - Default
   - TransparentFX

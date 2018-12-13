@@ -28,8 +28,7 @@ public class Enemy : MonoBehaviour
 		health -= amount;
 		healthBar.fillAmount = health / startHealth;
 
-		if (health <= 0)
-			Destroy(this.gameObject);
+		if (health <= 0) Destroy(this.gameObject);
 	}
 
 	void OnTriggerEnter2D(Collider2D other)
