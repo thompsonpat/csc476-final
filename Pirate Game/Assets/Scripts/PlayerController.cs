@@ -104,12 +104,12 @@ public class PlayerController : MonoBehaviour
         }
 
         if (other.tag == "CannonBall")
-		{
-			var explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
-			Destroy(explosion, .15f);
-			health -= 1;
+        {
+            var explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
+            Destroy(explosion, .15f);
+            health -= 1;
             Destroy(other.gameObject);
-		}
+        }
 
     }
 
@@ -145,18 +145,23 @@ public class PlayerController : MonoBehaviour
 
     void AddCannon(string side)
     {
-        if (side == "Left" && (numLeftCannons < maxLeftCannons))
+        if (crew >= 2)
         {
-            if (numLeftCannons == 0) this.transform.Find("CannonL1").gameObject.SetActive(true);
-            if (numLeftCannons == 1) this.transform.Find("CannonL2").gameObject.SetActive(true);
-            numLeftCannons += 1;
+            if (side == "Left" && (numLeftCannons < maxLeftCannons))
+            {
+                if (numLeftCannons == 0) this.transform.Find("CannonL1").gameObject.SetActive(true);
+                if (numLeftCannons == 1) this.transform.Find("CannonL2").gameObject.SetActive(true);
+                numLeftCannons += 1;
+            }
+
+            if (side == "Right" && (numRightCannons < maxRightCannons))
+            {
+                if (numRightCannons == 0) this.transform.Find("CannonR1").gameObject.SetActive(true);
+                if (numRightCannons == 1) this.transform.Find("CannonR2").gameObject.SetActive(true);
+                numRightCannons += 1;
+            }
+            crew -= 2;
         }
 
-        if (side == "Right" && (numRightCannons < maxRightCannons))
-        {
-            if (numRightCannons == 0) this.transform.Find("CannonR1").gameObject.SetActive(true);
-            if (numRightCannons == 1) this.transform.Find("CannonR2").gameObject.SetActive(true);
-            numRightCannons += 1;
-        }
     }
 }

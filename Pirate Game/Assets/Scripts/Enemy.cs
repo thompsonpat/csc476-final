@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
 		// Finds all colliders within certain radius from given point
-		Collider2D[] collidersHit = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.x), 5.0f);
+		Collider2D[] collidersHit = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.x), 3.0f);
 		foreach(var collider in collidersHit)
 		{
 			if (collider.tag == "Player")
@@ -65,6 +65,20 @@ public class Enemy : MonoBehaviour
  		float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
  		Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
  		transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * speed);
-		 Debug.Log(angle);
+		ShootCannons("RightSide");
 	}
+
+	void ShootCannons(string side)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.name.Contains("Cannon"))
+            {
+                if (child.gameObject.tag == side)
+                {
+                    if (child.gameObject.activeSelf) child.gameObject.SendMessage("ShootCannon");
+                }
+            }
+        }
+    }
 }

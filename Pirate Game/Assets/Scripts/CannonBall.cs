@@ -7,6 +7,7 @@ public class CannonBall : MonoBehaviour
 
     public int speed = 150;
     public float range = 2.5f;
+    public float thrust = 8.0f;
 
     [Header("Set Dynamically")]
     public GameObject parent;
@@ -20,9 +21,21 @@ public class CannonBall : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = grandParentRB.velocity;
-        if (parent.tag == "Front") rb.AddForce(transform.up * speed);
-        if (parent.tag == "LeftSide") rb.AddForce(-transform.right * speed);
-        if (parent.tag == "RightSide") rb.AddForce(transform.right * speed);
+        if (parent.tag == "Front")
+        {
+            rb.AddForce(transform.up * speed);
+            grandParentRB.AddForce(-transform.up * thrust);
+        }
+        if (parent.tag == "LeftSide")
+        {
+            rb.AddForce(-transform.right * speed);
+            grandParentRB.AddForce(transform.right * thrust);
+        }
+        if (parent.tag == "RightSide")
+        {
+            rb.AddForce(transform.right * speed);
+            grandParentRB.AddForce(-transform.right * thrust);
+        }
         Destroy(this.gameObject, range);
     }
 
