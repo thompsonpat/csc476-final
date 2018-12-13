@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     public Sprite hullSprite;
     public Sprite hullSpriteMed;
     public Sprite hullSpriteLow;
+    public Sprite largeSailSprite;
+    public Sprite largeSailSpriteMed;
+    public Sprite largeSailSpriteLow;
 
     [Header("Set in Inspector")]
     public int level = 1;
@@ -24,6 +27,10 @@ public class PlayerController : MonoBehaviour
     public int sailsDown = 0;
     public int maxSailsDown = 3;
     public float speed = 0;
+
+    public int sailLevel = 0;
+    public int sailWoodCost = 4;
+    public int sailCrewCost = 2;
 
     private int maxLeftCannons = 2;
     private int maxRightCannons = 2;
@@ -139,9 +146,21 @@ public class PlayerController : MonoBehaviour
         }
         if (level == 2)
         {
-            if ((health / maxHealth) > 0.7f) gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
-            if ((health / maxHealth) < 0.7f) gameObject.GetComponent<SpriteRenderer>().sprite = hullSpriteMed;
-            if ((health / maxHealth) < 0.4f) gameObject.GetComponent<SpriteRenderer>().sprite = hullSpriteLow;
+            if ((health / maxHealth) > 0.7f)
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
+                this.transform.Find("SailLg").GetComponent<SpriteRenderer>().sprite = largeSailSprite;
+            }
+            if ((health / maxHealth) < 0.7f)
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = hullSpriteMed;
+                this.transform.Find("SailLg").GetComponent<SpriteRenderer>().sprite = largeSailSpriteMed;
+            }
+            if ((health / maxHealth) < 0.4f)
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = hullSpriteLow;
+                this.transform.Find("SailLg").GetComponent<SpriteRenderer>().sprite = largeSailSpriteLow;
+            }
         }
     }
 
@@ -181,9 +200,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void AddSail()
+    {
+        if (level == 2 && crew >= sailCrewCost && wood >= sailWoodCost)
+        {
+            if (sailLevel == 0)
+            {
+                this.transform.Find("SailSm").gameObject.SetActive(true);
+                sailWoodCost += 2;
+                sailCrewCost += 2;
+                sailLevel += 1;
+            }
+            if (sailLevel == 1)
+            {
+                this.transform.Find("SailLg").gameObject.SetActive(true);
+                sailLevel += 1;
+            }
+        }
+    }
+
     void AddCannon(string side)
     {
-        if ((crew >= 2) && (wood >=2))
+        if ((crew >= 2) && (wood >= 2))
         {
             if (side == "Left" && (numLeftCannons < maxLeftCannons))
             {
