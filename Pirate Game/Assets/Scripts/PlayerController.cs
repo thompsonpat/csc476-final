@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject cannonBallPrefab;
+    public GameObject explosionPrefab;
     public Sprite dinghySprite;
     public Sprite hullSprite;
 
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public int maxHealth = 2;
     public int health;
     public float accel = 1.2f;
-    public float turnSpeed = 2.5f;
+    public float turnSpeed = 0.5f;
     public float maxSpeed = 10f;
     public int sailsDown = 0;
     public int maxSailsDown = 3;
@@ -60,7 +61,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q)) AddCannon("Left");
         if (Input.GetKeyDown(KeyCode.E)) AddCannon("Right");
 
-        if (Input.GetKeyDown(KeyCode.Keypad0)) LevelUp();
+        if (Input.GetKeyDown(KeyCode.Keypad0)) UpgradeHull();
     }
 
     void FixedUpdate()
@@ -94,9 +95,22 @@ public class PlayerController : MonoBehaviour
         {
             if (health < maxHealth) health += 1;
             else wood += 1;
+            Destroy(other.gameObject);
         }
-        if (other.tag == "Crew") crew += 1;
-        Destroy(other.gameObject);
+        if (other.tag == "Crew")
+        {
+            crew += 1;
+            Destroy(other.gameObject);
+        }
+
+        if (other.tag == "CannonBall")
+		{
+			var explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
+			Destroy(explosion, .15f);
+			health -= 1;
+            Destroy(other.gameObject);
+		}
+
     }
 
     void ShootCannons(string side)
@@ -113,7 +127,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void LevelUp()
+    void UpgradeHull()
     {
         if (level == 1)
         {
@@ -122,6 +136,7 @@ public class PlayerController : MonoBehaviour
             // sailsDown = 1;
             // maxSailsDown = 1;
             // gameObject.GetComponent<Rigidbody2D>().mass = 1.2f;
+            gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(0.4f, 1);
             gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
             this.transform.Find("Front Cannon").transform.localPosition = new Vector2(0, .4f);
             level++;
