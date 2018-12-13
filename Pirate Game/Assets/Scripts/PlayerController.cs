@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
     public int maxSailsDown = 3;
     public float speed = 0;
 
+    private int maxLeftCannons = 2;
+    private int maxRightCannons = 2;
+    private int numLeftCannons = 0;
+    private int numRightCannons = 0;
+
     // public bool canShoot = true;
 
     [Header("Inventory")]
@@ -48,15 +53,14 @@ public class PlayerController : MonoBehaviour
             if (sailsDown < 0) sailsDown = 0;
         }
 
-        // If 'Down'
-        if (Input.GetKeyDown(KeyCode.Space)) ShootCannons("Front");
-        if (Input.GetKeyDown(KeyCode.Q)) ShootCannons("LeftSide");
-        if (Input.GetKeyDown(KeyCode.E)) ShootCannons("RightSide");
+        if (Input.GetKeyDown(KeyCode.UpArrow)) ShootCannons("Front");
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) ShootCannons("LeftSide");
+        if (Input.GetKeyDown(KeyCode.RightArrow)) ShootCannons("RightSide");
 
-        if (Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            LevelUp();
-        }
+        if (Input.GetKeyDown(KeyCode.Q)) AddCannon("Left");
+        if (Input.GetKeyDown(KeyCode.E)) AddCannon("Right");
+
+        if (Input.GetKeyDown(KeyCode.Keypad0)) LevelUp();
     }
 
     void FixedUpdate()
@@ -86,21 +90,24 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         // Debug.Log(gameObject.name + " : " + other.gameObject.name + " : " + Time.time);
-        if (other.tag == "Wood") wood += 1;
+        if (other.tag == "Wood")
+        {
+            if (health < maxHealth) health += 1;
+            else wood += 1;
+        }
         if (other.tag == "Crew") crew += 1;
         Destroy(other.gameObject);
     }
 
     void ShootCannons(string side)
     {
-        int count = 0;
         foreach (Transform child in transform)
         {
             if (child.gameObject.name.Contains("Cannon"))
             {
                 if (child.gameObject.tag == side)
                 {
-                    child.gameObject.SendMessage("ShootCannon");
+                    if (child.gameObject.activeSelf) child.gameObject.SendMessage("ShootCannon");
                 }
             }
         }
@@ -110,13 +117,31 @@ public class PlayerController : MonoBehaviour
     {
         if (level == 1)
         {
-            accel = .9f;
-            turnSpeed = 2.5f;
-            sailsDown = 1;
-            maxSailsDown = 1;
+            // accel = .9f;
+            // turnSpeed = 2.5f;
+            // sailsDown = 1;
+            // maxSailsDown = 1;
+            // gameObject.GetComponent<Rigidbody2D>().mass = 1.2f;
             gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
-            gameObject.GetComponent<Rigidbody2D>().mass = 1.2f;
+            this.transform.Find("Front Cannon").transform.localPosition = new Vector2(0, .4f);
             level++;
+        }
+    }
+
+    void AddCannon(string side)
+    {
+        if (side == "Left" && (numLeftCannons < maxLeftCannons))
+        {
+            if (numLeftCannons == 0) this.transform.Find("CannonL1").gameObject.SetActive(true);
+            if (numLeftCannons == 1) this.transform.Find("CannonL2").gameObject.SetActive(true);
+            numLeftCannons += 1;
+        }
+
+        if (side == "Right" && (numRightCannons < maxRightCannons))
+        {
+            if (numRightCannons == 0) this.transform.Find("CannonR1").gameObject.SetActive(true);
+            if (numRightCannons == 1) this.transform.Find("CannonR2").gameObject.SetActive(true);
+            numRightCannons += 1;
         }
     }
 }

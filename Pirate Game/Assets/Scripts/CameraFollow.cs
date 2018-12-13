@@ -5,14 +5,13 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public GameObject followTarget;
+    private Camera camera;
 
     public float dampTime = 0.15f;
     public float smooth = 1.5f;
     private Vector3 velocity = Vector3.zero;
     private float cameraZ = 0;
-    private float followTargetZ = 0;
 
-    private Camera camera;
 
     void Start()
     {
