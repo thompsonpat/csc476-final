@@ -1,17 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     public GameObject cannonBallPrefab;
     public GameObject explosionPrefab;
     public Sprite dinghySprite;
+    public Sprite dinghySpriteMed;
+    public Sprite dinghySpriteLow;
     public Sprite hullSprite;
+    public Sprite hullSpriteMed;
+    public Sprite hullSpriteLow;
 
     [Header("Set in Inspector")]
     public int level = 1;
-    public int maxHealth = 2;
+    public int maxHealth = 3;
     public int health;
     public float accel = 1.2f;
     public float turnSpeed = 0.5f;
@@ -107,10 +112,37 @@ public class PlayerController : MonoBehaviour
         {
             var explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
             Destroy(explosion, .15f);
-            health -= 1;
+            TakeDamage(1);
             Destroy(other.gameObject);
         }
 
+    }
+
+    void TakeDamage(int damage)
+    {
+        health -= damage;
+        if (health == 0)
+        {
+            int scene = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(scene, LoadSceneMode.Single);
+        }
+        UpdateBoatSprite();
+    }
+
+    void UpdateBoatSprite()
+    {
+        if (level == 1)
+        {
+            if ((health / maxHealth) > 0.7f) gameObject.GetComponent<SpriteRenderer>().sprite = dinghySprite;
+            if ((health / maxHealth) < 0.7f) gameObject.GetComponent<SpriteRenderer>().sprite = dinghySpriteMed;
+            if ((health / maxHealth) < 0.4f) gameObject.GetComponent<SpriteRenderer>().sprite = dinghySpriteLow;
+        }
+        if (level == 2)
+        {
+            if ((health / maxHealth) > 0.7f) gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
+            if ((health / maxHealth) < 0.7f) gameObject.GetComponent<SpriteRenderer>().sprite = hullSpriteMed;
+            if ((health / maxHealth) < 0.4f) gameObject.GetComponent<SpriteRenderer>().sprite = hullSpriteLow;
+        }
     }
 
     void ShootCannons(string side)
@@ -131,21 +163,27 @@ public class PlayerController : MonoBehaviour
     {
         if (level == 1)
         {
-            // accel = .9f;
-            // turnSpeed = 2.5f;
-            // sailsDown = 1;
-            // maxSailsDown = 1;
-            // gameObject.GetComponent<Rigidbody2D>().mass = 1.2f;
+            accel = 3.0f;
+            turnSpeed = 20.0f;
+            sailsDown = 1;
+            maxSailsDown = 1;
+            maxHealth = 5;
+            health = maxHealth;
+            gameObject.GetComponent<Rigidbody2D>().mass = 5;
             gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(0.4f, 1);
             gameObject.GetComponent<SpriteRenderer>().sprite = hullSprite;
             this.transform.Find("Front Cannon").transform.localPosition = new Vector2(0, .4f);
+
+            wood -= 10;
+            crew -= 5;
+
             level++;
         }
     }
 
     void AddCannon(string side)
     {
-        if (crew >= 2)
+        if ((crew >= 2) && (wood >=2))
         {
             if (side == "Left" && (numLeftCannons < maxLeftCannons))
             {
@@ -160,7 +198,10 @@ public class PlayerController : MonoBehaviour
                 if (numRightCannons == 1) this.transform.Find("CannonR2").gameObject.SetActive(true);
                 numRightCannons += 1;
             }
+
+            // Cannon resource cost
             crew -= 2;
+            wood -= 2;
         }
 
     }

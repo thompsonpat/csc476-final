@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class ResourceSpawner : MonoBehaviour
 {
+    public GameObject enemyPrefab;
     public GameObject woodPrefab;
     public GameObject crewPrefab;
 
@@ -19,12 +20,24 @@ public class ResourceSpawner : MonoBehaviour
         grid = GameObject.Find("Grid").GetComponent<Grid>();
         
         InvokeRepeating("SpawnWood", 5.0f, 15.0f);
-        InvokeRepeating("SpawnCrew", 5.0f, 30.0f);
+        InvokeRepeating("SpawnCrew", 5.0f, 15.0f);
+        InvokeRepeating("SpawnEnemy", 5.0f, 30.0f);
     }
 
     void Update()
     {
 
+    }
+
+    void SpawnEnemy()
+    {   
+        Vector3Int cellPosition = grid.WorldToCell(usableTiles[Random.Range(0, usableTiles.Count)]);
+
+        // Create new enemy
+        var newEnemy = Instantiate(enemyPrefab, grid.GetCellCenterWorld(cellPosition), Quaternion.identity);
+
+        // Rotate new enemy
+        newEnemy.transform.Rotate(Vector3.forward * Random.Range(0, 360));
     }
 
     void SpawnWood()
