@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Prefabs and Sprites")]
     public GameObject cannonBallPrefab;
     public GameObject explosionPrefab;
     public Sprite dinghySprite;
@@ -16,6 +18,19 @@ public class PlayerController : MonoBehaviour
     public Sprite largeSailSprite;
     public Sprite largeSailSpriteMed;
     public Sprite largeSailSpriteLow;
+
+    [Header("UI Elements")]
+    public Image healthBar;
+    public Image sailsDownBar;
+    public Text crewText;
+    public Text woodText;
+    public Text cannonCost;
+    public Text sailCost;
+    public Text hullCost;
+    public Button addCannonLBtn;
+    public Button addCannonRBtn;
+    public Button addSailBtn;
+    public Button upgradeHullBtn;
 
     [Header("Set in Inspector")]
     public int level = 1;
@@ -42,8 +57,6 @@ public class PlayerController : MonoBehaviour
     private int numLeftCannons = 0;
     private int numRightCannons = 0;
 
-    // public bool canShoot = true;
-
     [Header("Inventory")]
     public int wood = 0;
     public int crew = 0;
@@ -53,6 +66,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         health = maxHealth;
+        UpdateUIText();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -63,12 +77,14 @@ public class PlayerController : MonoBehaviour
         {
             sailsDown += 1;
             if (sailsDown > maxSailsDown) sailsDown = maxSailsDown;
+            UpdateUIText();
         }
         // If 'Down'
         if (Input.GetKeyDown(KeyCode.S))
         {
             sailsDown -= 1;
             if (sailsDown < 0) sailsDown = 0;
+            UpdateUIText();
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow)) ShootCannons("Front");
@@ -113,6 +129,7 @@ public class PlayerController : MonoBehaviour
             if (health < maxHealth) health += 1;
             else wood += 1;
             UpdateBoatSprite();
+            healthBar.fillAmount = (float)health / (float)maxHealth;
             Destroy(other.gameObject);
         }
         if (other.tag == "Crew")
@@ -128,12 +145,13 @@ public class PlayerController : MonoBehaviour
             TakeDamage(1);
             Destroy(other.gameObject);
         }
-
+        UpdateUIText();
     }
 
     void TakeDamage(int damage)
     {
         health -= damage;
+        healthBar.fillAmount = (float)health / (float)maxHealth;
         if (health == 0)
         {
             int scene = SceneManager.GetActiveScene().buildIndex;
@@ -184,11 +202,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void UpgradeHull()
+    public void UpgradeHull()
     {
         if (level == 1)
         {
-            accel = 3.0f;
+            accel = 15.0f;
             turnSpeed = 20.0f;
             sailsDown = 1;
             maxSailsDown = 1;
@@ -203,10 +221,11 @@ public class PlayerController : MonoBehaviour
             crew -= hullCrewCost;
 
             level += 1;
+            UpdateUIText();
         }
     }
 
-    void AddSail()
+    public void AddSail()
     {
         if (level == 2 && crew >= sailCrewCost && wood >= sailWoodCost)
         {
@@ -222,10 +241,11 @@ public class PlayerController : MonoBehaviour
                 this.transform.Find("SailLg").gameObject.SetActive(true);
                 sailLevel += 1;
             }
+            UpdateUIText();
         }
     }
 
-    void AddCannon(string side)
+    public void AddCannon(string side)
     {
         if ((crew >= cannonCrewCost) && (wood >= cannonWoodCost))
         {
@@ -246,7 +266,56 @@ public class PlayerController : MonoBehaviour
             // Cannon resource cost
             crew -= cannonCrewCost;
             wood -= cannonWoodCost;
+            UpdateUIText();
         }
+    }
 
+    void UpdateUIText()
+    {
+        crewText.text = "FREE CREW: " + crew;
+        woodText.text = "WOOD: " + wood;
+        sailsDownBar.fillAmount = (float)sailsDown / (float)maxSailsDown;
+        cannonCost.text = "Cannon: " + cannonWoodCost + " Wood, " + cannonCrewCost + " Crew";
+        sailCost.text = "Sail: " + sailWoodCost + " Wood, " + sailCrewCost + " Crew";
+        hullCost.text = "Hull: " + hullWoodCost + " Wood, " + hullCrewCost + " Crew";
+
+        if (level == 1)
+        {
+            upgradeHullBtn.interactable = false;
+            if (wood >= hullWoodCost && crew >= hullCrewCost)
+            {
+                upgradeHullBtn.interactable = true;
+            }
+            addSailBtn.interactable = false;
+            addCannonLBtn.interactable = false;
+            addCannonRBtn.interactable = false;
+
+            if (crew >= cannonCrewCost && wood >= cannonWoodCost && numLeftCannons < 2)
+            {
+                addCannonLBtn.interactable = true;
+            }
+
+            if (crew >= cannonCrewCost && wood >= cannonWoodCost && numRightCannons < 2)
+            {
+                addCannonRBtn.interactable = true;
+            }
+        }
+        if (level == 2)
+        {
+            upgradeHullBtn.interactable = false;
+            if (crew >= sailCrewCost && wood >= sailWoodCost && sailLevel < 2)
+            {
+                addSailBtn.interactable = true;
+            }
+        }
+    }
+
+    void AddLeftCannon()
+    {
+        AddCannon("Left");
+    }
+    void AddRightCannon()
+    {
+        AddCannon("Right");
     }
 }
