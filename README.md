@@ -1,8 +1,8 @@
 # CSC-476 Final Game
 Top-down pirate game.
 
-# Why the game is large and complex.
-This game is large and complex because it contains many game systems found in most successful games. This game will contain most of the topics we have covered in class. Some of these topics include, but are not limited to: sprites, animations, colisions and code-generated enemies. This game will also have a much more fleshed out progression system than any we have made in the class so far. This is important because it is what bring players back time after time. To provide a solid progression system to players, all systems that contribute to said progression system must be well balanced to incentivize the player with a reason to continue playing the game. This game will also attempt to provide a basic AI for enemies in the game. This is something that has not been attempted in the class and will require an understanding on how the enemy will interact with aspects of the map and the game mechanics.
+# Project Goal
+This game contains many game systems found in most successful games. Some of these systems/topics include, but are not limited to: sprites, animations, colisions and code-generated enemies. This game will also have a much more fleshed out progression system than any we have made in the class so far. This is important because it is what bring players back time after time. To provide a solid progression system to players, all systems that contribute to said progression system must be well balanced to incentivize the player with a reason to continue playing the game. This game will also attempt to provide a basic AI for enemies in the game. This is something that has not been attempted in the class and will require an understanding on how the enemy will interact with aspects of the map and the game mechanics.
 
 # Game Design Document
 
